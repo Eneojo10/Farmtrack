@@ -18,9 +18,9 @@ function Dashboard() {
           <div className="agricultur">
             <h3>
               FarmTrack
-              <span className="agric-image">
+              {/* <span className="agric-image">
                 <img src={image} alt="" />
-              </span>
+              </span> */}
               
             </h3>
           </div>
