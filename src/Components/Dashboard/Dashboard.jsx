@@ -42,8 +42,7 @@ function Dashboard() {
           {[
             { name: "Dashboard", path: "/mainboard" },
             { name: "Farmers", path: "/farmers" },
-            { name: " Soil Tester", path: "/farms" },
-            
+            { name: "Soil Tester", path: "/farms" },
             { name: "Test Request", path: "/farm-request" },
           ].map((item, index) => (
             <Link to={item.path} key={index} className="b-line">
@@ -56,7 +55,8 @@ function Dashboard() {
                   cursor: "pointer",
                 }}
               >
-                <h4>{item.name}</h4>
+                <h4 style={{ fontSize: "20px", fontFamily:"sans-serif"}}>{item.name}</h4>{" "}
+                
               </div>
             </Link>
           ))}
