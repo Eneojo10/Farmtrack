@@ -42,8 +42,8 @@ function Dashboard() {
           {[
             { name: "Dashboard", path: "/mainboard" },
             { name: "Farmers", path: "/farmers" },
-            { name: "Soil Tester", path: "/farms" },
-            { name: "Test Request", path: "/farm-request" },
+            { name: "Test Request", path: "/farms" },
+            // { name: "Test Request", path: "/farm-request" },
           ].map((item, index) => (
             <Link to={item.path} key={index} className="b-line">
               <div
