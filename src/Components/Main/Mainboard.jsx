@@ -1,488 +1,127 @@
 import React, { useEffect, useState } from "react";
 import Dashboard from "../Dashboard/Dashboard";
-import image from "../image/user2.jpg";
-import image2 from "../image/soil.jpg";
-import { WiDegrees } from "react-icons/wi";
-import image3 from "../image/weather.png";
+import image from "../image/Rice-Farm.jpg";
 import { IoIosSearch } from "react-icons/io";
-import Chart from "../Chart/Chart";
-import image03 from "../image/leaf2.png";
-import Hamburger from "../Hamburger/Hamburger";
-import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-
-const data = {
-  labels: ["Red", "Blue", "Yellow", "Green"],
-  datasets: [
-    {
-      data: [300, 50, 100, 75],
-      backgroundColor: ["#029c34", "#029c34", "#e2fea5"],
-      borderColor: "#FFFFFF",
-      borderWidth: 1,
-    },
-  ],
-};
-
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top",
-    },
-    tooltip: {
-      enabled: true,
-    },
-  },
-};
+import axios from "axios";
 
 function Mainboard() {
   const [farmers, setFarmers] = useState({});
-  const [request, setRequest] = useState(null);
-
-
- 
-
+  const [requests, setRequests] = useState(null);
 
   useEffect(() => {
     const fetchFarmers = async () => {
       try {
-        let token = localStorage.getItem("token");
-
+        const token = localStorage.getItem("token");
         const response = await axios.get(
           "https://agriculture-server-beta.onrender.com/api/v1/admin/analytics",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
-        console.log(response.data.data);
-
         setFarmers(response.data.data);
       } catch (error) {
-        console.error("Error fetching summary data:", error);
+        console.error("Error fetching farmers data:", error);
+      }
+    };
+
+    const fetchRequests = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          "https://agriculture-server-beta.onrender.com/api/v1/admin/requests",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setRequests(response.data.data);
+      } catch (error) {
+        console.error("Error fetching requests data:", error);
       }
     };
 
     fetchFarmers();
-  }, []);
-
-  useEffect(() => {
-    const fetchRequest = async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        const response = await axios.get(
-          "https://agriculture-server-beta.onrender.com/api/v1/admin/requests",
-          {
-            headers: {
-              "Authorization": `Bearer ${token}`,
-            },
-          }
-        );
-        console.log(response.data.data);
-        setRequest(response.data.data); 
-      } catch (error) {
-        console.error("Error fetching summary data:", error);
-      }
-    };
-
-    fetchRequest();
+    fetchRequests();
   }, []);
 
   return (
-    <div>
-      <div className="content">
-        <div className="dash-board">
-          <Dashboard />
+    <div className="mainboard-container">
+      <div className="dash-board">
+        <Dashboard />
+      </div>
+
+      <div className="main-content">
+        <div className="top-bar">
+          <div className="search-bar">
+            <IoIosSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search for any content"
+              className="search-input"
+            />
+          </div>
+          <div className="user-avatar">
+            <img src={image} alt="User Avatar" />
+          </div>
         </div>
 
-        <div className="con-tent">
-          <div className="cont-ent">
-            <div className="content-top">
-              <div className="input-holder">
-                <IoIosSearch className="search-icon" />
-                <input
-                  type="text"
-                  placeholder="Search for any content"
-                  className="search-input"
-                />
-              </div>
-
-              <div className="content-img">
-                <img src={image} alt="" />
-              </div>
+        <div className="summary-section">
+          <h5>Summary</h5>
+          <div className="summary-cards">
+            <div className="summary-card">
+              <h4>Farmers</h4>
+              <p>{farmers.totalUsers || "Loading..."}</p>
+              <div className="progress-circle">12%</div>
             </div>
-            <br />
-            <div className="ham-burg">
-              <div className="ham-flex">
-                <div className="img03">
-                  <img src={image03} alt="" />
-                </div>
-                <div className="ham">
-                  <Hamburger />
-                </div>
-              </div>
+            <div className="summary-card">
+              <h4>Farm Lands</h4>
+              <p>{farmers.totalLands || "Loading..."}</p>
+              <div className="progress-circle">40%</div>
             </div>
-
-            <div className="weathersummary">
-              <div className="cl1">
-                <h3>Summary</h3>
-                <div className="color-flex">
-                  <div className="color0001">
-                    <div className="color01">
-                      <div className="cp">
-                        <h3>Farmers</h3>
-                        {/* <h5>Hello World...</h5> */}
-                        <p>{farmers.totalUsers}</p>
-                      </div>
-                      <div className="circle-progress">
-                        <svg width="40" height="80" viewBox="0 0 100 100">
-                          <circle
-                            className="circle-bg"
-                            cx="50"
-                            cy="50"
-                            r="45"
-                          />
-                          <circle
-                            className="circle-fill"
-                            cx="50"
-                            cy="50"
-                            r="45"
-                            style={{
-                              strokeDasharray: "283",
-                              strokeDashoffset: "169",
-                            }}
-                          />
-
-                          <text
-                            x="50"
-                            y="50"
-                            textAnchor="middle"
-                            stroke="black"
-                            strokeWidth="1px"
-                            dy=".3em"
-                            fontSize={"28px"}
-                            className="circle-text"
-                          >
-                            12%
-                          </text>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="color02">
-                    <div className="color01">
-                      <div className="cp">
-                        <h3>Farm Lands</h3>
-                        {/* <h5>Hello World...</h5> */}
-                        <p>{farmers.totalLands}</p>
-                      </div>
-                      <div className="circle-progress">
-                        <svg width="40" height="80" viewBox="0 0 100 100">
-                          <circle
-                            className="circle-bg"
-                            cx="50"
-                            cy="50"
-                            r="45"
-                          />
-                          <circle
-                            className="circle-fill"
-                            cx="50"
-                            cy="50"
-                            r="45"
-                            style={{
-                              strokeDasharray: "283",
-                              strokeDashoffset: "169",
-                            }}
-                          />
-
-                          <text
-                            x="50"
-                            y="50"
-                            textAnchor="middle"
-                            stroke="black"
-                            strokeWidth="1px"
-                            dy=".3em"
-                            fontSize={"28px"}
-                            className="circle-text"
-                          >
-                            40%
-                          </text>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="color-flex">
-                  <div className="color02">
-                    <div className="color01">
-                      <div className="cp">
-                        <h3> Soil Tester</h3>
-                        {/* <h5>Hello World...</h5> */}
-                        <p>980</p>
-                      </div>
-                      <div className="circle-progress">
-                        <svg width="40" height="80" viewBox="0 0 100 100">
-                          <circle
-                            className="circle-bg"
-                            cx="50"
-                            cy="50"
-                            r="45"
-                          />
-                          <circle
-                            className="circle-fill"
-                            cx="50"
-                            cy="50"
-                            r="45"
-                            style={{
-                              strokeDasharray: "283",
-                              strokeDashoffset: "169",
-                            }}
-                          />
-
-                          <text
-                            x="50"
-                            y="50"
-                            textAnchor="middle"
-                            stroke="black"
-                            strokeWidth="1px"
-                            dy=".3em"
-                            fontSize={"28px"}
-                            className="circle-text"
-                          >
-                            40%
-                          </text>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="color0001">
-                    <div className="color01">
-                      <div className="cp">
-                        <h3>Soil Request</h3>
-                        {/* <h5>Hello World...</h5> */}
-                        <p>{farmers.totalRequests}</p>
-                      </div>
-                      <div className="circle-progress">
-                        <svg width="40" height="80" viewBox="0 0 100 100">
-                          <circle
-                            className="circle-bg"
-                            cx="50"
-                            cy="50"
-                            r="45"
-                          />
-                          <circle
-                            className="circle-fill"
-                            cx="50"
-                            cy="50"
-                            r="45"
-                            style={{
-                              strokeDasharray: "283",
-                              strokeDashoffset: "169",
-                            }}
-                          />
-
-                          <text
-                            x="50"
-                            y="50"
-                            textAnchor="middle"
-                            stroke="black"
-                            strokeWidth="1px"
-                            dy=".3em"
-                            fontSize={"28px"}
-                            className="circle-text"
-                          >
-                            40%
-                          </text>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <br />
-                <br />
-
-                <div>
-                  <h3>Manage your Farm</h3>
-                  <div className="table-container">
-                    <table className="table">
-                      <thead>
-                        <tr>
-                          <th>S/N</th>
-                          <th>Farm Name</th>
-                          <th>Address</th>
-                          <th>Status</th>
-                          <th>Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {request ? (
-                          request?.map((land, index) => (
-                            <tr key={land._id}>
-                              <td>{index + 1}</td>
-                              <td>{land.land.name}</td>
-                              <td>{land.land.location.address}</td>
-                              <td>{land.status || "N/A"}</td>
-                              <td>
-                                <div className="dropdown">
-                                  <button
-                                    className="dropdown-btn btn-sm"
-                                    type="button"
-                                    onClick={() => toggleDropdown(index)}
-                                  >
-                                    <FontAwesomeIcon
-                                      icon={faEllipsisVertical}
-                                    />
-                                  </button>
-                                  {/* {dropdownVisible === index && (
-                                    <ul className="dropdown-menu">
-                                      <li>
-                                        <Link
-                                          className="dropdown-item"
-                                          to={`/farm/${land._id}`} // Assuming you pass farm ID to view
-                                          style={{
-                                            textDecoration: "none",
-                                            fontWeight: "700",
-                                            color: "#0099cc",
-                                          }}
-                                        >
-                                          VIEW
-                                        </Link>
-                                      </li>
-                                      <li>
-                                        <button
-                                          className="dropdown-item"
-                                          style={{
-                                            textDecoration: "none",
-                                            fontWeight: "700",
-                                            color: "#cc0000",
-                                            border: "none",
-                                            background: "none",
-                                          }}
-                                          onClick={() =>
-                                            alert("Edit functionality here")
-                                          }
-                                        >
-                                          EDIT
-                                        </button>
-                                      </li>
-                                    </ul>
-                                  )} */}
-                                </div>
-                              </td>
-                            </tr>
-                          ))
-                        ) : (
-                          <tr>
-                            <td colSpan="5">Loading...</td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <br />
-
-                <br />
-                {/* <div className="soil-button">
-                  <button className="soil-btn">Request for Soil Test</button>
-                </div> */}
-              </div>
-              <div className="cl2">
-                {/* <h3>Weather Forecast</h3> */}
-
-                <div className="temperature">
-                  <div className="w1">
-                    <h4>June 25</h4>
-                    <div className="num-bers">
-                      <h3>
-                        29{" "}
-                        <span className="degrees">
-                          <WiDegrees />
-                        </span>
-                      </h3>
-                      <p>Temperature</p>
-                    </div>
-                  </div>
-                  <div className="w1">
-                    <h4>June 25</h4>
-                    <div className="num-bers">
-                      <h3>
-                        32
-                        <span className="degrees">
-                          <WiDegrees />
-                        </span>
-                      </h3>
-                      <p>Temperature</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="temperatures">
-                  <div className="w1">
-                    <h4>June 25</h4>
-                    <div className="num-bers">
-                      <h3>
-                        39
-                        <span className="degrees">
-                          <WiDegrees />
-                        </span>
-                      </h3>
-                      <p>Temperature</p>
-                    </div>
-                  </div>
-                  <div className="w1">
-                    <h4>June 25</h4>
-                    <div className="num-bers">
-                      <h3>
-                        42
-                        <span className="degrees">
-                          <WiDegrees />
-                        </span>
-                      </h3>
-                      <p>Temperature</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="harvest">
-                  <div className="harvest-chart">
-                    <div className="har-vest">
-                      <h4>Harvesting Cost</h4>
-                      <div className="harvest-holder">
-                        <div>
-                          <h4>Wheat</h4>
-                        </div>
-                        <div>
-                          <h4>$70K</h4>
-                        </div>
-                      </div>
-                      <div className="border-line"></div>
-                      <div className="harvest-holder">
-                        <div>
-                          <h4>Rice</h4>
-                        </div>
-                        <div>
-                          <h4>$24K</h4>
-                        </div>
-                      </div>
-
-                      <div className="estimate">
-                        <h4>Total Estimate</h4>
-                        <span className="dollars">$100K</span>
-                      </div>
-                    </div>
-
-                    <div style={{ width: "80px", marginTop: "55px" }}>
-                      <Chart type="pie" data={data} options={options} />
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="summary-card">
+              <h4>Soil Testers</h4>
+              <p>10</p>
+              <div className="progress-circle">60%</div>
+            </div>
+            <div className="summary-card">
+              <h4>Soil Requests</h4>
+              <p>{farmers.totalRequests || "Loading..."}</p>
+              <div className="progress-circle">75%</div>
             </div>
           </div>
+        </div>
+
+        <div className="table-section">
+          <h5>Manage Your Farm</h5>
+          <table className="styled-table">
+            <thead>
+              <tr>
+                <th>S/N</th>
+                <th>Farm Name</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {requests ? (
+                requests.map((land, index) => (
+                  <tr key={land._id}>
+                    <td>{index + 1}</td>
+                    <td>{land.land.name}</td>
+                    <td>{land.land.location.address}</td>
+                    <td>{land.status || "N/A"}</td>
+                    <td>
+                      <button className="action-btn">
+                        <FontAwesomeIcon icon={faEllipsisVertical} />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5">Loading...</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import image from "../image/leaf2.png";
 import { AiOutlineLogout } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { FaSeedling } from "react-icons/fa"
 
 function Dashboard() {
   const [selected, setSelected] = useState(null);
@@ -16,11 +17,11 @@ function Dashboard() {
         <Link to={"/mainboard"} className="b-line">
           <div className="agricultur">
             <h3>
-              agri
+              FarmTrack
               <span className="agric-image">
                 <img src={image} alt="" />
               </span>
-              cultur
+              
             </h3>
           </div>
         </Link>
